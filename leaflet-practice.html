@@ -1,0 +1,58 @@
+<html>
+<head>
+	<title>webmap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+	<div id="map" style="height: 100%; width: 100%;"></div>
+<script>
+
+	const basemap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	})
+
+	//地図2の設定
+	const addmap1 = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg', {
+	maxZoom: 18,
+	attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
+	});
+
+	var markers = L.layerGroup();
+
+	L.marker([34.9849,135.7586]).bindPopup('Kyoto station').addTo(markers),
+	L.marker([35.0138,135.7516]).bindPopup('Nijoujo').addTo(markers),
+	L.marker([35.03949,135.72955]).bindPopup('Kinkakuji').addTo(markers),
+	L.marker([35.0303,135.7349]).bindPopup('Kitanotenmangu').addTo(markers);
+
+
+//地図1をベースマップに設定する
+
+const webmap = L.map('map',{
+		center:[34.9849,135.7586],
+		zoom:12,
+		layers:[basemap,markers]
+	});
+
+const maps = {
+"OSM":basemap,
+"Aerial photo（2007～）":addmap1
+};
+
+const spots = {
+	"Sightseeing spots": markers,
+};
+
+
+//レイヤを選択して表示できるようにする
+L.control.layers(maps,spots).addTo(webmap);
+
+L.control.scale({imperial: false}).addTo(webmap);
+
+
+
+</script>
+</body>
+
+</html>
